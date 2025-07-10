@@ -8,3 +8,6 @@ export interface RequestWithUser extends Request{
     user: Omit<User, 'password'> // Remove o campo password
 }
 
+export interface AuthenticatedRequest extends Request {
+  user: { userId: string; email: string }; // ajuste conforme seu payload
+}

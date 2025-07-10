@@ -1,6 +1,7 @@
 import { BadRequestException, Body, Controller, Post, Get, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
 
 
 
@@ -8,7 +9,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class AuthController {
     constructor(
         private readonly authService: AuthService,
-        private readonly prisma: PrismaService
+        private readonly prisma: PrismaService,
+        private readonly jwtService: JwtService,
     ){}
 
     @Post('register')
@@ -40,5 +42,17 @@ export class AuthController {
         })
 
         return {message: 'Email verficado com sucesso'}
+    }
+
+    @Get('authToken')
+    async getAuthToken(@Body() body:{ id:string, email: string}){
+        
+        if(!body.id || !body.email){
+            throw new BadRequestException('Dados inválidos');
+        }
+
+        return {
+            access_token: this.jwtService.sign({sub: body.id, email: body.email})
+        }
     }
 }
