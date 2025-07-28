@@ -17,7 +17,7 @@ export default function AuthPanel() {
   const onLoginSubmit = async (data: DataLogin) => {
     try {
       const res = await api.post('/auth/login', data);
-      localStorage.setItem('token', res.data.acess_token);
+      localStorage.setItem('token', res.data.access_token);
       router.push('/dashboard');
     } catch (err) {
       console.log(err);

@@ -1,7 +1,9 @@
-import { BadRequestException, Body, Controller, Post, Get, Query } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Post, Get, Query, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { AuthenticatedRequest } from 'src/common/types/request-with-user';
 
 
 
@@ -54,5 +56,11 @@ export class AuthController {
         return {
             access_token: this.jwtService.sign({sub: body.id, email: body.email})
         }
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('me')
+    async getProfile(@Req() req: AuthenticatedRequest) {
+        return req.user;
     }
 }
