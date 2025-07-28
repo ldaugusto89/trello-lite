@@ -11,3 +11,4 @@ export interface RequestWithUser extends Request{
 export interface AuthenticatedRequest extends Request {
   user: { userId: string; email: string }; // ajuste conforme seu payload
 }
+
